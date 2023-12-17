@@ -1,5 +1,6 @@
 package org.noear.folkdb.client;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -8,83 +9,70 @@ import java.util.Set;
  * @author noear
  * @see 1.0
  */
-public interface DbClient {
+public interface DbClient<T> {
     /**
      * 获取
      */
-    byte[] get(String key);
+    T get(String key) throws IOException;
 
     /**
      * 设置
      */
-    void set(String key, byte[] data, int seconds);
+    void set(String key, T data, int seconds) throws IOException;
 
     //====
 
     /**
      * 原子增
      */
-    long atomIncrement(String key, int seconds);
+    long atomIncrement(String key, int seconds) throws IOException;
 
     /**
      * 原子减
      */
-    long atomDecrement(String key, int seconds);
+    long atomDecrement(String key, int seconds) throws IOException;
 
     /**
      * 原子锁
      */
-    boolean atomLock(String key, int seconds);
+    boolean atomLock(String key, int seconds) throws IOException;
 
     //=======
 
     /**
      * 啥希获取字段
      */
-    byte[] hashGetField(String key, String field);
+    T hashGetField(String key, String field) throws IOException;
 
     /**
      * 啥希获取所有字段
      */
-    Map<String, byte[]> hashGetAll(String key);
+    Map<String, T> hashGetAll(String key) throws IOException;
 
     /**
      * 啥希设置字段
      */
-    void hashSetField(String key, String field, byte[] data);
+    void hashSetField(String key, String field, T data) throws IOException;
 
     /**
      * 啥希设置全部
      */
-    void hashSetAll(String key, Map<String, byte[]> hashAll);
+    void hashSetAll(String key, Map<String, T> hashAll) throws IOException;
 
-    //=======
-    void setAdd(String key, byte[] data);
-
-    void setSize(String key);
-
-    Set<byte[]> setGetAll(String key);
 
     //======
 
-    void listAdd(String key, byte[] data);
+    void listAdd(String key, T data) throws IOException;
 
-    byte[] listPop(String key);
-
-
-    int listSize(String key);
+    T listPop(String key) throws IOException;
 
 
-    byte[] listGet(String key, int index);
+    int listSize(String key) throws IOException;
 
-    Collection<byte[]> listGetRange(String key, int start, int count);
 
-    Collection<byte[]> listGetAll(String key);
+    T listGet(String key, int index) throws IOException;
 
-    //=====
+    Collection<T> listGetRange(String key, int start, int count) throws IOException;
 
-    void docAdd(String key, Document doc);
-    void docUpset(String key, Document doc);
-    Document docGet(String key, String docId);
-    Collection<Document> docSearch(String key, String sql);
+    Collection<T> listGetAll(String key) throws IOException;
 }
